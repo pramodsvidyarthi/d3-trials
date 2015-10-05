@@ -1,0 +1,1045 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9]>         <html class="no-js lt-ie10" lang="en"> <![endif]-->
+<!--[if gt IE 9]>      <html class="no-js" lang="en"> <![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <title>XCM</title>
+    <meta name="author" content="Jack Sparrow">
+    <meta name="description" content="KitchenSink">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="../bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+</head>
+<style>
+.axis text {
+    font: 12px sans-serif;
+}
+
+text.count {
+    font: 12px sans-serif;
+    fill: white;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.d3-tooltip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* Avoid capturing mouse events */
+    
+    pointer-events: none;
+    max-width: 200px;
+    width: auto;
+    height: 50px;
+    text-align: center;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 5px;
+    padding: 12px 8px;
+    font-size: 14px;
+    color: #fff;
+}
+
+.d3-tooltip:after {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    border-top-color: rgba(0, 0, 0, 0.6);
+    border-width: 6px;
+    left: 50%;
+    margin-left: -6px;
+}
+
+.changeyr {
+    cursor: pointer;
+}
+
+.rects rect:hover {
+    cursor: pointer;
+}
+
+.buttonContainer {
+    margin: 10px;
+}
+
+svg {
+    background-color: white;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+</style>
+<style>
+svg {
+    font-family: "Helvetica Neue", Helvetica, Aria, sans-serif;
+    font-size: 10px;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+line.cutoff {
+    stroke: black;
+    stroke-width: 2;
+}
+
+path.data {
+    fill: transparent;
+    stroke: grey;
+    stroke-width: 2;
+}
+
+defs svg .data-1 {
+    stroke: rgba(128, 128, 128, 0.4);
+}
+</style>
+
+<body>
+    <!--[if lt IE 10]>
+                        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+                <![endif]-->
+    <div class="header-container">
+        <header class="header outercontainer">
+            <!-- <a href="404.html">404 Page</a> -->
+            <div class="row">
+                <div class="col col_2 header-left">
+                    <div class='nav-icon'> <i class="fa fa-bars fa-2x fa-inverse"></i></div>
+                    <!-- <div class='img'></div> -->
+                    <img src="./images/xcm_logo.png" width="120" />
+                </div>
+                <div class="col col_4 navigation">
+                    <nav>
+                        <ul>
+                            <li class='active'>Dashboard</li>
+                            <li>Tasks</li>
+                            <li>Reports</li>
+                            <li>Scheduler</li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col col_4 search">
+                    <input type="text" placeholder="search here">
+                    <i class="fa fa-search"></i>
+                    <div class='right-curved'>
+                        <i class="fa fa-caret-down fa-inverse"></i>
+                    </div>
+                </div>
+                <div class="col col_4 header-right">
+                    <button class='rounded-left uname'>user name goes here</button>
+                    <div class="notification">
+                        <span><i class="fa fa-cog fa-inverse fa-lg"></i></span>
+                        <span><i class="fa fa-bell fa-inverse fa-lg"></i></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+    <!-- .header -->
+    <div class="main outercontainer">
+        <div id='dashboard'>
+            <h1 style="margin:10px 550px;">Duedate Summary</h1>
+            <div class="options" style="margin:0 300px;">
+                <i class="fa fa-chevron-left"></i>
+                <span class="changeyr prev">Prev Year</span>
+                <p style="display:inline-block;margin-left:200px;">2015</p>
+                <span class="changeyr next" style="margin:2px 3px 0 150px;">Next Year</span>
+                <i class="fa fa-chevron-right"></i>
+            </div>
+        </div>
+        <!-- <div class="buttonContainer">
+            <input type="button" value="Randomize" class='randomize'>
+        </div> -->
+    </div>
+    <!-- .container -->
+    <div class="footer">
+    </div>
+    <!-- .footer -->
+    <div class="chart">
+    </div>
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script type="text/javascript" src="scripts/tooltip.js"></script>
+    <!-- // <script type="text/javascript" src="scripts/donut.js"></script> -->
+    <!-- // <script type="text/javascript" src="scripts/pie.js"></script> -->
+    <script type="text/javascript">
+    var curr = 2015,
+        newwin;
+
+    var margin = {
+            top: 20,
+            right: 0,
+            bottom: 20,
+            left: 0
+        },
+        width = 960 - margin.left - margin.right,
+        height = 600 - margin.top - margin.bottom;
+
+    var x = d3.scale.ordinal()
+        .domain([0, 1])
+        .rangePoints([0, width], 1);
+
+    var color = d3.scale.ordinal()
+        .range(["#65A620", "#961A1A", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+    var y = d3.scale.ordinal()
+        .rangeRoundBands([0, height], .6);
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .tickSize(5);
+
+    // d3.json("/data2.json", function(error, data) {
+    //             console.log(data);
+    //             color.domain(d3.keys(data[0]).filter(function(key) {
+    //                 return key !== "monthname";
+    //             }));
+    //         });
+
+    function generateData() {
+        return [{
+            "monthname": "Jan",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }, {
+            "monthname": "Feb",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }, {
+            "monthname": "Mar",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }, {
+            "monthname": "Apr",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }, {
+            "monthname": "May",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }, {
+            "monthname": "Jun",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }, {
+            "monthname": "Jul",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }, {
+            "monthname": "Aug",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }, {
+            "monthname": "Sep",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }, {
+            "monthname": "Oct",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }, {
+            "monthname": "Nov",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }, {
+            "monthname": "Dec",
+            "remaining": Math.ceil(Math.random() * 20) + 10
+        }]
+    }
+
+    var data = generateData();
+
+    y.domain(data.map(function(d) {
+        return d.monthname;
+    }));
+
+    //  x.domain(data.map(function(d) {
+    //     return d.monthname;
+    // }));
+
+
+    var svg = d3.select("#dashboard").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("g")
+        .attr("transform", "translate(" + x(0) + ",0)")
+        .attr("class", "axis")
+        .call(yAxis)
+        .append("svg:line")
+        .attr("x1", 0)
+        .attr("y1", 15)
+        .attr("y2", height - 10)
+        .style({
+            'stroke': 'Black',
+            'fill': 'black',
+            'stroke-width': '2px'
+        })
+
+    svg.append('g')
+        .attr('class', 'rects')
+        .selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .on('mouseover', function() {
+            d3.select(this).transition().duration(300).style('fill', function() {
+                return '#e08214'
+            });
+        })
+        .on('mouseout', function() {
+            d3.select(this).transition().duration(300).style('fill', function() {
+                return '#269'
+            });
+        })
+        .on('click', popoutPage)
+        .style("fill", function(d) {
+            return '#269';
+        })
+        .attr("x", x(0))
+        .attr("y", function(d) {
+            return y(d.monthname);
+        })
+        .attr("width", 0)
+        .transition()
+        .duration(1000)
+        .attr("width", function(d, i) {
+            return d.remaining * 20;
+        })
+        .attr("height", 25)
+        .call(tip);
+
+
+    svg.append('g').selectAll('text')
+        .data(data).enter()
+        .append('text')
+        .attr('class', 'count')
+        .text(function(d) {
+            return d.remaining;
+        })
+        .attr("x", x(0) + 10)
+        .attr("y", function(d) {
+            return y(d.monthname) + 15;
+        })
+
+    var ele = d3.selectAll('.changeyr').on('click', function(e) {
+        var thiz = this;
+        var data = generateData();
+        var rectgroup = d3.select('.rects');
+        rectgroup.selectAll('rect')
+            .data(data)
+            .transition()
+            .duration(1000)
+            .attr("width", function(d, i) {
+                return d.remaining * 20;
+            });
+
+        var txtgroup = d3.selectAll('.count');
+        txtgroup
+            .data(data)
+            .transition()
+            .text(function(d) {
+                return d.remaining;
+            });
+        var yr = d3.select('p');
+        yr
+        // .style({
+        //     'font-weight': 'bolder',
+        //     'font-size': '18px'
+        // })
+            .transition()
+            .duration(500)
+            .style({
+                'font-weight': 'bolder',
+                'font-size': '18px',
+                'color': '#' + (Math.random() * 0xFFFFFF << 0).toString(16)
+            })
+            .text(function() {
+                if (thiz.classList.contains('next')) {
+                    curr = curr + 1;
+                } else {
+                    curr = curr - 1;
+                }
+                return curr;
+            });
+    });
+
+    function popoutPage(dt) {
+        console.log(newwin);
+        if (!newwin || newwin.closed) {
+            newwin = window.open('gridresult.html', 'gridresult', "width=1250, height=600");
+            newwin.onload = function() {
+                newwin.postMessage(JSON.stringify(dt), "http://localhost:9000/gridresult.html");
+            };
+        } else {
+            newwin.postMessage(JSON.stringify(dt), "http://localhost:9000/gridresult.html");
+        }
+
+    }
+
+    if (newwin) {
+        newwin.onunload = function() {
+            // window.postMessage('closed','http://localhost:9000/dashboard.html')
+            newwin = 'undefined';
+        }
+    }
+
+
+    window.addEventListener("message", function receiveMessage(event) {
+        console.log(event);
+    });
+    </script>
+    <!-- <script type="text/javascript">
+    //Width and height
+    var w = 500;
+    var h = 300;
+    var padding = 40;
+
+    //Dynamic, random dataset
+    var dataset = []; //Initialize empty array
+    var numDataPoints = 50; //Number of dummy data points to create
+    var maxRange = Math.random() * 1000; //Max range of new values
+    for (var i = 0; i < numDataPoints; i++) { //Loop numDataPoints times
+        var newNumber1 = Math.floor(Math.random() * maxRange); //New random integer
+        var newNumber2 = Math.floor(Math.random() * maxRange); //New random integer
+        dataset.push([newNumber1, newNumber2]); //Add new number to array
+    }
+
+    //Create scale functions
+    var xScale = d3.scale.linear()
+        .domain([0, d3.max(dataset, function(d) {
+            return d[0];
+        })])
+        .range([padding, w - padding]);
+
+    var yScale = d3.scale.linear()
+        .domain([0, d3.max(dataset, function(d) {
+            return d[1];
+        })])
+        .range([h - padding, padding]);
+
+    //Define X axis
+    var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient("bottom")
+        .ticks(5);
+
+    //Define Y axis
+    var yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient("left")
+        .ticks(5);
+
+    //Create SVG element
+    var svg = d3.select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+
+    //Create circles
+    svg.append("g")
+        .attr("id", "circles")
+        .selectAll("circle")
+        .data(dataset)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) {
+            return xScale(d[0]);
+        })
+        .attr("cy", function(d) {
+            return yScale(d[1]);
+        })
+        .attr("r", 2);
+
+    //Create X axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + (h - padding + 5) + ")")
+        .call(xAxis);
+
+    //Create Y axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(" + (padding - 5) + ",0)")
+        .call(yAxis);
+
+
+
+    //On click, update with new data            
+    d3.select(".randomize")
+        .on("click", function() {
+            //New values for dataset
+            var numValues = dataset.length; //Count original length of dataset
+            var maxRange = Math.random() * 1000; //Max range of new values
+            dataset = []; //Initialize empty array
+            for (var i = 0; i < numValues; i++) { //Loop numValues times
+                var newNumber1 = Math.floor(Math.random() * maxRange); //New random integer
+                var newNumber2 = Math.floor(Math.random() * maxRange); //New random integer
+                dataset.push([newNumber1, newNumber2]); //Add new number to array
+            }
+
+            //Update scale domains
+            xScale.domain([0, d3.max(dataset, function(d) {
+                return d[0];
+            })]);
+            yScale.domain([0, d3.max(dataset, function(d) {
+                return d[1];
+            })]);
+
+            //Update all circles
+            svg.selectAll("circle")
+                .data(dataset)
+                .transition()
+                .duration(1000)
+                .attr("cx", function(d) {
+                    return xScale(d[0]);
+                })
+                .attr("cy", function(d) {
+                    return yScale(d[1]);
+                });
+
+            //Update X axis
+            svg.select(".x.axis")
+                .transition()
+                .duration(1000)
+                .call(xAxis);
+
+            //Update Y axis
+            svg.select(".y.axis")
+                .transition()
+                .duration(1000)
+                .call(yAxis);
+
+        });
+    </script> -->
+    <script type="text/javascript">
+    var margin = {
+            top: 10,
+            right: 10,
+            bottom: 20,
+            left: 10
+        },
+        width = 960 - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
+
+
+    var x = d3.scale.ordinal()
+        .rangeRoundBands([0, height], .2);
+
+
+    // var dataz = [{
+    //     name: 'pre prep',
+    //     count: [30, 40]
+    // }, {
+    //     name: 'prep',
+    //     count: [50, 80]
+    // }, {
+    //     name: 'review',
+    //     count: [60, 40]
+    // }, {
+    //     name: 'assembly',
+    //     count: [80, 60]
+    // }]  
+
+    var dataz = [{
+        clientName: 'John Doe',
+        status: {
+            'pre prep': [8, 'eva'],
+            // 'prep': 0,
+            'review': [12, 'stephen'],
+            'assembly': [5, 'danny'],
+            'partner-signoff': [12, 'david']
+        }
+    }, {
+        clientName: 'Jane Doe',
+        status: {
+            'pre prep': [6, 'philip'],
+            'prep': [12, 'feddrick'],
+            // 'review': 7,
+            'assembly': [5, 'francis'],
+            'partner-signoff': [10, 'alex']
+        }
+    }, {
+        clientName: 'Jake Doe',
+        status: {
+            'pre prep': [18, 'michael'],
+            'prep': [15, 'rachel'],
+            'review': [12, 'steve'],
+            'assembly': [3, 'morris'],
+            'completed': [8, 'joe']
+        }
+    }, {
+        clientName: 'Johnson Doe',
+        status: {
+            'pre prep': [7, 'albert'],
+            'prep': [7, 'xavier'],
+            'review': [10, 'john'],
+            'assembly': [10, 'borris'],
+            'checlist': [20, 'alan'],
+            'completed': [5, 'wade']
+        }
+    }]
+
+
+
+    var y = d3.scale.ordinal()
+        .rangeRoundBands([0, width], .2);
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("top")
+        .ticks(3)
+        // .tickSize(-height);
+
+    var names = [];
+    dataz.map(function(d) {
+        names.push(Object.keys(d.status));
+    });
+
+    y.domain(_.uniq(_.flatten(names)));
+
+    x.domain(dataz.map(function(d) {
+        return d.clientName;
+    }))
+
+
+    var zoom = d3.behavior.zoom()
+        .x(x)
+        .y(y)
+        .scaleExtent([1, 1])
+        .on("zoom", zoomed);
+
+    function zoomed() {
+      console.log('arguments');
+        svg.select(".x.axis").call(xAxis);
+        svg.select(".y.axis").call(yAxis);
+    }
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("left")
+        .ticks(5)
+        // .tickSize(-width);
+    // .tickSize(16, 0);
+    // .tickFormat(d3.time.format("%b"));
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + ",0)");
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0,50)")
+        .call(xAxis)
+        .selectAll(".tick text")
+        .style("text-anchor", "start")
+        .attr("x", 0)
+        .attr("y", 0);
+
+
+    // var e = y.domain(_.keys(dataz[0].status));
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(0,40)")
+        .call(yAxis)
+        .selectAll(".tick text")
+        .style("text-anchor", "start")
+        .attr({
+            'x': 6,
+            'y': 0
+        });
+
+    // x.domain(d3.max(dataz, function(d){
+    //     return d.count[0];
+    // }))
+
+    // svg.append("g")
+    //     .attr("id", "circles")
+    //     .attr('transform', 'translate(' + 100 + ',' + 50 + ')')
+    //     .selectAll("circle")
+    //     .data(dataz)
+    //     .enter()
+    //     .append("circle")
+
+    //         // console.log(x(d.count[0]));
+    //         // return xAxis(d.count[0]);
+    //         // console.log(d);
+    //         // return x(dataz[i].status);
+    //     })
+    //     .attr("cy", function(d, i) {
+    //         // return 20*i;
+    //         // return y(d.count[1]) && y(d.count[1]);
+    //         // return y(dataz[i].status);
+    //     })
+    //     .attr("r", 5)
+    //     .call(tip);
+
+    // var tempx = d3.scale.ordinal()
+    //     .rangeRoundBands([0, width], .2);
+
+
+    // var tempxAxis = d3.svg.axis()
+    //     .scale(tempx)
+    //     .orient("top")
+    //     .ticks(5);
+
+    // tempx.domain(function(){
+    //     return dataz.clientName;
+    // })
+
+    // var tempy = d3.scale.linear()
+    //     .domain([0, d3.max(dataz, function(d) {
+    //         return d3.max(_.toArray(d.status));
+    //     })])
+    //     .range([width - 10, 0]);
+
+
+    // var tempyAxis = d3.svg.axis()
+    //     .scale(y)
+    //     .orient("top")
+    //     .ticks(5);
+
+    var ar = [];
+    _.each(dataz, function(m, n) {
+        _.each(m.status, function(val, ind) {
+            // console.log(val, ind);
+            ar.push(_.flatten([ind, m.clientName, val]));
+        })
+    })
+
+    svg.append("g")
+        .attr('id', "circles")
+        .attr('transform', 'translate(' + x(dataz[1].clientName) + ',0)')
+        .selectAll('circle')
+        // .data(function() {
+        //     var arr = [];
+        //     dataz.map(function(d, i) {
+        //         arr.push(_.toArray(d.status));
+        //     })
+        //     return _.flatten(arr);
+        // })
+        .data(ar)
+        .enter()
+        .append('circle')
+        .attr('cx', function(d, i) {
+            return y(d[0]);
+            // console.log(e(d[1]));
+            // return 225 * (i % 4);
+            // return y(ar[0]);
+        })
+        .attr('cy', function(d, i) {
+            return x(d[1]) + 75;
+        })
+        .attr('r', function(d) {
+            return (d[2] / 2) + 2;
+        })
+        .call(tip)
+        .style('fill', function(d) {
+            return (d[2] >= 10) ? '#961A1A' : '#265';
+        })
+    </script>
+    <!-- <script>
+    function toomanydata() {
+            var margin = {
+                    'left': 30,
+                    'bottom': 20,
+                    'top': 15,
+                    'right': 240
+                },
+                width = 960,
+                height = 135,
+                w = width - margin.left - margin.right,
+                h = height - margin.top - margin.bottom,
+                xscale = d3.scale.linear().domain([0, w]).range([0, w]),
+                yscale = d3.scale.linear().domain([0, h]).range([h, 0]),
+                xaxis = d3.svg.axis().scale(xscale).orient('bottom'),
+                yaxis = d3.svg.axis().scale(yscale).orient('left').tickValues(d3.range(0, 101, 20)),
+                clip = null;
+
+            function rescale() {
+                xscale.domain([0, w = width - margin.left - margin.right]).range([0, w]);
+                yscale.domain([0, h = height - margin.top - margin.bottom]).range([h, 0]);
+            }
+
+            var line = d3.svg.line()
+                .x(function(d) {
+                    return xscale(d[0]);
+                })
+                .y(function(d) {
+                    return yscale(d[1]);
+                })
+                .interpolate('basis');
+
+            var bisect = d3.bisector(function(d) {
+                return d[0];
+            });
+
+            function chart(selection) {
+                selection.each(function(data) {
+                    var svg = d3.select(this).selectAll('svg')
+                        .data([data.points])
+                        .attr('width', width)
+                        .attr('height', height)
+
+                    var svge = svg.enter()
+                        .append('svg')
+                        .attr('width', width)
+                        .attr('height', height)
+                        .append('g')
+                        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+                    svge.append('g')
+                        .attr('class', 'x axis')
+
+                    svg.select('g.x.axis')
+                        .attr('transform', 'translate(0, ' + h + ')')
+
+                    svge.append('g')
+                        .attr('class', 'y axis')
+
+                    var idx = bisect.left(data.points, w);
+
+                    svge.append('g')
+                        .attr('clip-path', clip)
+                        .selectAll('path.data')
+                        .data([data.points.slice(0, idx), data.points.slice(idx - 1)])
+                        .enter().append('path')
+                        .attr('class', function(d, i) {
+                            return 'data data-' + i;
+                        })
+
+                    svge.append('g')
+                        .attr('class', 'left anchor');
+
+                    svge.append('g')
+                        .attr('class', 'right anchor');
+
+                    svg.select('g.right.anchor')
+                        .attr('transform', 'translate(' + w + ', 0)');
+
+                    svg.selectAll('.x.axis').call(xaxis)
+                    svg.selectAll('.y.axis').call(yaxis)
+                    svg.selectAll('.data').attr('d', line);
+                });
+            }
+
+            chart.margin_right = function(m) {
+                if (!arguments.length) return margin.right;
+                margin.right = m;
+                rescale();
+                return chart;
+            };
+
+            chart.height = function(h) {
+                if (!arguments.length) return height;
+                height = h;
+                rescale();
+                return chart;
+            };
+
+            chart.width = function(w) {
+                if (!arguments.length) return width;
+                width = w;
+                rescale();
+                return chart;
+            };
+
+            chart.view_width = function() {
+                return w;
+            };
+
+            chart.xscale = function(xs) {
+                if (!arguments.length) return xscale;
+                xscale = xs;
+                rescale();
+                return chart;
+            };
+
+            chart.clip = function(c) {
+                if (!arguments.length) return clip;
+                clip = c;
+                return chart;
+            };
+
+            return chart;
+        }
+        // toomanydata();
+    </script>
+    <script>
+    var random = d3.random.bates(10);
+    var points = d3.range(0, 928, 8).map(function(e) {
+            return [e, (e / 1000.0) * 30 + 100 * random()];
+        }),
+        setup = d3.range(0, 3).map(function() {
+            var chart = toomanydata()
+                .clip('url(#clipper)');
+
+            return {
+                'points': points,
+                'chart': chart
+            };
+        }),
+        max = d3.max(points, function(d) {
+            return d[0];
+        });
+
+    var defs = d3.select('body')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        // .append('defs');
+
+    // defs.append('clipPath')
+    //     .attr('id', 'clipper')
+    //     .append('rect')
+    //     .attr('x', 0)
+    //     .attr('y', 0)
+    //     .attr('width', 960)
+    //     .attr('height', 100);
+
+    defs
+        .data(setup)
+        .each(function(datum) {
+            d3.select(this).call(datum.chart)
+        });
+
+    defs.each(function(datum) {
+        var ra = d3.select(this).select('svg g.right.anchor');
+
+        ra.append('line')
+            .attr('class', 'cutoff')
+            .attr('x1', 0)
+            .attr('y1', 0)
+            .attr('x2', 0)
+            .attr('y2', 100)
+            .attr('stroke-dasharray', '5, 2, 2');
+    });
+
+    defs.each(function(datum) {
+        var selection = d3.select(this);
+        console.log();
+        selection.call(datum.chart.width(720).margin_right(0));
+
+        datum.zoom = d3.behavior.zoom()
+            .x(datum.chart.xscale())
+            .scaleExtent([1, 1])
+            .on('zoom', function() {
+                selection.call(datum.chart);
+            });
+
+        selection.select('svg')
+            .attr('cursor', 'move')
+            .call(datum.zoom)
+            .on("mousewheel.zoom", null)
+            .on("DOMMouseScroll.zoom", null);
+    });
+
+    defs.call(function(selection) {
+        var datum = selection.datum();
+
+        datum.zoom.on('zoom', function() {
+            var t = datum.zoom.translate(),
+                dx = Math.min(0, Math.max(t[0], datum.chart.view_width() - max)),
+                dy = t[1];
+
+            datum.zoom.translate([dx, dy]);
+            selection.call(datum.chart);
+        });
+    });
+    </script> -->
+    <script type="text/javascript">
+    var margin = {
+            top: 20,
+            right: 20,
+            bottom: 30,
+            left: 40
+        },
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+        
+    var x = d3.scale.linear()
+        .domain([-width / 2, width / 2])
+        .range([0, width]);
+
+    var y = d3.scale.linear()
+        .domain([-height / 2, height / 2])
+        .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+        // .ticks(5)
+        // .tickSize(-height);
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        // .ticks(5)
+        // .tickSize(-width);
+
+    var zoom = d3.behavior.zoom()
+        .x(x)
+        .y(y)
+        .scaleExtent([1, 2])
+        .on("zoom", zoomed);
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .call(zoom);
+
+    function zoomed() {
+        svg.select(".x.axis").call(xAxis);
+        svg.select(".y.axis").call(yAxis);
+    }
+
+    svg.append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .style('fill', '#fff');
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+    </script>
+</body>
+
+</html>

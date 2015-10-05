@@ -1,0 +1,18 @@
+// bower:scss
+@import 'vendors/vendors';
+@import 'base/basesettings'; //this is not bourbon's base
+@import 'utils/utils';
+@import 'components/components';
+@import 'layout/layout';
+// endbower 
+
+body{
+	background: lighten(white, 5%);
+	font-family: Museo-100;
+	/*background-color: $primary-blue;*/
+}
+
+div.main{
+	/*height: 1000px;*/
+	/*background: lighten(white, 10%);;*/
+}

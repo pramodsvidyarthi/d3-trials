@@ -1,0 +1,40 @@
+.row {
+    @include rem("max-width", $maxWidth);
+    margin: 0 auto;
+    padding: 10px ($gutter-width / 2);
+    @include clearfix();
+}
+
+.col {
+    position: relative;
+    min-height: 5px;
+    margin-left: $gutter-width;
+    display: block;
+    /*padding: 0.2em;*/
+}
+
+
+@include createcolclass();
+
+
+*[class*="no-gutter"] {
+    margin-left: 0.1%;
+}
+
+*[class*="half-gutter"] {
+    margin-left: ($gutter-width / 2);
+}
+
+.col:first-child {
+    margin-left: ($gutter-width / 2);
+}
+
+.col:last-child {
+    /*margin-right: ($gutter-width / 2);*/
+}
+
+.outercontainer {
+    @include outer-container();
+    margin: 0 auto;
+}
+

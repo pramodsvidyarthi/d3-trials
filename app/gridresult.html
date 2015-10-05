@@ -1,0 +1,488 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9]>         <html class="no-js lt-ie10" lang="en"> <![endif]-->
+<!--[if gt IE 9]>      <html class="no-js" lang="en"> <![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <title>XCM</title>
+    <meta name="author" content="Jack Sparrow">
+    <meta name="description" content="KitchenSink">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="../bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+</head>
+<style type="text/css">
+/*
+  backgrid
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT license.
+*/
+
+.backgrid-container {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 465px;
+    padding: 0;
+    overflow: auto;
+    border: 0;
+}
+
+.backgrid {
+    width: 100%;
+    max-width: 100%;
+    background-color: transparent;
+    border-collapse: collapse;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.backgrid th,
+.backgrid td {
+    display: none;
+    height: 20px;
+    max-width: 250px;
+    padding: 4px 5px;
+    overflow: hidden;
+    line-height: 20px;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+    border-bottom: 1px solid #DDD;
+}
+
+.backgrid th.renderable,
+.backgrid td.renderable {
+    display: table-cell;
+    text-align: center;
+}
+
+.backgrid th {
+    font-weight: bold;
+    text-align: center;
+}
+
+.backgrid th.sortable a {
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.backgrid thead th {
+    vertical-align: bottom;
+    background-color: #f9f9f9;
+}
+
+.backgrid thead th a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.backgrid.backgrid-striped tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.backgrid tbody tr.empty {
+    font-style: italic;
+    color: gray;
+}
+
+.backgrid tbody tr.empty td {
+    display: table-cell;
+    text-align: center;
+}
+
+.backgrid td.editor {
+    padding: 0;
+}
+
+.backgrid td.editor,
+.backgrid tbody tr:nth-child(odd) td.editor {
+    background-color: rgba(82, 168, 236, 0.1);
+    outline: 1px solid rgba(82, 168, 236, 0.8);
+    outline-offset: -1px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition-duration: 200ms;
+    -moz-transition-duration: 200ms;
+    -o-transition-duration: 200ms;
+    transition-duration: 200ms;
+    -webkit-transition-property: width, outline, background-color;
+    -moz-transition-property: width, outline, background-color;
+    -o-transition-property: width, outline, background-color;
+    transition-property: width, outline, background-color;
+    -webkit-transition-timing-function: ease-in-out;
+    -moz-transition-timing-function: ease-in-out;
+    -o-transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+}
+
+.backgrid td.editor input[type=text] {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0 5px;
+    margin: 0;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.backgrid td.editor input[type=text]::-ms-clear {
+    display: none;
+}
+
+.backgrid td.error,
+.backgrid tbody tr:nth-child(odd) td.error {
+    background-color: rgba(255, 210, 77, 0.1);
+    outline: 1px solid #ffd24d;
+}
+
+.backgrid td.editor:focus,
+.backgrid th.editor:focus {
+    outline: 0;
+}
+
+.backgrid .sort-caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 0.3em;
+    border: 0;
+    content: "";
+}
+
+.backgrid .ascending .sort-caret {
+    vertical-align: baseline;
+    border-top: none;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid #000000;
+    border-left: 4px solid transparent;
+}
+
+.backgrid .descending .sort-caret {
+    vertical-align: super;
+    border-top: 4px solid #000000;
+    border-right: 4px solid transparent;
+    border-bottom: none;
+    border-left: 4px solid transparent;
+}
+
+.backgrid .string-cell,
+.backgrid .uri-cell,
+.backgrid .email-cell,
+.backgrid .string-cell.editor input[type=text],
+.backgrid .uri-cell.editor input[type=text],
+.backgrid .email-cell.editor input[type=text] {
+    text-align: left;
+}
+
+.backgrid .date-cell,
+.backgrid .time-cell,
+.backgrid .datetime-cell,
+.backgrid .number-cell,
+.backgrid .integer-cell,
+.backgrid .percent-cell,
+.backgrid .date-cell.editor input[type=text],
+.backgrid .time-cell.editor input[type=text],
+.backgrid .datetime-cell.editor input[type=text],
+.backgrid .number-cell.editor input[type=text],
+.backgrid .integer-cell.editor input[type=text],
+.backgrid .percent-cell.editor input[type=text] {
+    text-align: right;
+}
+
+.backgrid .boolean-cell,
+.backgrid .boolean-cell.editor input[type=checkbox] {
+    text-align: center;
+}
+
+.backgrid .select-cell {
+    text-align: center;
+}
+
+.backgrid .select-cell.editor {
+    padding: 0;
+}
+
+.backgrid .select-cell.editor select {
+    display: block;
+    width: 100%;
+    height: 28px;
+    padding: 4px 5px;
+    margin: 0;
+    line-height: 28px;
+    vertical-align: middle;
+    background-color: white;
+    border: 0;
+    outline: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.backgrid .select-cell.editor select[multiple] {
+    height: auto;
+}
+
+.backgrid .select-cell.editor:focus {
+    border: 0;
+    outline: 0;
+}
+
+h1{
+    width: 100%;
+    float: left;
+    display: inline-block;
+    text-align: center;
+    font-size: 26px;
+    margin: 20px auto;
+    color: #445978;
+    text-decoration: underline;
+}
+
+#grid{
+    clear: both;
+}
+
+.backgrid .select-cell.editor select::-moz-focus-inner,
+.backgrid .select-cell.editor optgroup::-moz-focus-inner,
+.backgrid .select-cell.editor option::-moz-focus-inner,
+.backgrid .select-cell.editor select::-o-focus-inner,
+.backgrid .select-cell.editor optgroup::-o-focus-inner,
+.backgrid .select-cell.editor option::-o-focus-inner {
+    border: 0;
+}
+</style>
+
+<body>
+    <div class="header-container">
+        <header class="header outercontainer">
+            <!-- <a href="404.html">404 Page</a> -->
+            <div class="row">
+                <div class="col col_2 header-left">
+                    <div class='nav-icon'> <i class="fa fa-bars fa-2x fa-inverse"></i></div>
+                    <!-- <div class='img'></div> -->
+                    <img src="./images/xcm_logo.png" width="120" />
+                </div>
+                <div class="col col_4 navigation">
+                    <nav>
+                        <ul>
+                            <li class='active'>Dashboard</li>
+                            <li>Tasks</li>
+                            <li>Reports</li>
+                            <li>Scheduler</li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col col_4 search">
+                    <input type="text" placeholder="search here">
+                    <i class="fa fa-search"></i>
+                    <div class='right-curved'>
+                        <i class="fa fa-caret-down fa-inverse"></i>
+                    </div>
+                </div>
+                <div class="col col_4 header-right">
+                    <button class='rounded-left uname'>user name goes here</button>
+                    <div class="notification">
+                        <span><i class="fa fa-cog fa-inverse fa-lg"></i></span>
+                        <span><i class="fa fa-bell fa-inverse fa-lg"></i></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+    <div class="main outercontainer">
+        <h1>Duedate Summary Grid</h1>
+        <div id='grid'>
+        </div>
+    </div>
+    <div class="footer">
+    </div>
+    <!-- .footer -->
+    <div class="chart">
+    </div>
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backgrid.js/0.3.5/backgrid.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/data3.json', false);
+        xhr.send();
+
+        var coldata = JSON.parse(xhr.response),
+            mod = Backbone.Model.extend({}),
+            collection = Backbone.Collection.extend({
+                model: mod,
+                initialize: function(options) {
+
+                },
+                sliceModels: function(num) {
+                    if (!this.originalModels) {
+                        this.originalModels = this.models;
+                    } else {
+                        this.models = this.originalModels.slice(0, ~~num);
+                        console.log(this.models);
+                        this.reset(this.models);
+                    }
+
+                }
+            });
+        window.colinst = new collection(coldata);
+        var columns = [{
+            name: "difficulty",
+            label: "Difficulty",
+            cell: "String"
+        }, {
+            name: "priority",
+            label: "Priority",
+            cell: "String"
+        }, {
+            name: "currentStatus",
+            label: "Status",
+            cell: "String"
+        }, {
+            name: "clientName",
+            label: "Client Name",
+            cell: "String"
+        }, {
+            name: "clientAccountNumber",
+            label: "Account Number",
+            cell: "String"
+        }, {
+            name: "category",
+            label: "Category",
+            cell: "String"
+        }, {
+            name: "taskType",
+            label: "Task Type",
+            cell: "String"
+        }, {
+            name: "description",
+            label: "Description",
+            cell: "String"
+        }, {
+            name: "assignedTo",
+            label: "Assigned To",
+            cell: "String"
+        }, {
+            name: "start_on",
+            label: "start Date",
+            cell: "String"
+        }, {
+            name: "lastChanged_on",
+            label: "last Changed Date",
+            cell: "String"
+        }, {
+            name: "periodEndDate",
+            label: "PeriodEnd Date",
+            cell: "String"
+        }, {
+            name: "due_on",
+            label: "Due Date",
+            cell: "String"
+        }, {
+            name: "extensionTask",
+            label: "Ext Type",
+            cell: "String"
+        }, {
+            name: "whohasExtension",
+            label: "Who Has Ext",
+            cell: "String"
+        }, {
+            name: "anticipateddue_on",
+            label: "ADD",
+            cell: "String"
+        }, {
+            name: "originatingLocation",
+            label: "Originating Location",
+            cell: "String"
+        }, {
+            name: "currentLocation",
+            label: "Current Location",
+            cell: "String"
+        }, {
+            name: "points",
+            label: "Points",
+            cell: "String"
+        }, {
+            name: "checklists",
+            label: "Checklist",
+            cell: "String"
+        }, {
+            name: "Details",
+            label: "Details",
+            cell: "String"
+        }, {
+            name: "isPortal",
+            label: "Portal",
+            cell: "String"
+        }]
+
+        function generateGrid(dt) {
+            var grid = new Backgrid.Grid({
+                columns: columns,
+                collection: window.colinst
+            });
+            window.colinst.sliceModels(dt.remaining);
+            $("#grid").append(grid.render().el);
+        }
+
+
+
+
+
+        window.addEventListener("message", function receiveMessage(event) {
+            // console.log(event);
+            var data = JSON.parse(event.data);
+            // console.log(data);
+            // console.log("Got a message from event.origin " + event.origin + ": ");
+            // console.log("<em>" + event.data + "</em>");
+            // posting back to message source, i.e. index.html
+            // second parameter is eventOrigin: must match event.origin
+            // event.source.postMessage("Hi! i received a message 'called'" + JSON.stringify(data), "*");
+            createGrid(data)
+        });
+
+
+        function createGrid(dt) {
+            window.colinst.sliceModels(dt.remaining);
+            if(!$('#grid').children().length){
+                generateGrid(dt);
+            }
+        }
+    })
+    </script>
+</body>

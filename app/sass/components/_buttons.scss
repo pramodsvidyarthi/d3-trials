@@ -1,0 +1,6 @@
+.rounded-left{
+	/*border-top-left-radius: 25px;*/
+	/*border-bottom-left-radius: 25px;*/
+	@include vendor(border-top-left-radius, 25px);
+	@include vendor(border-bottom-left-radius, 25px);
+}

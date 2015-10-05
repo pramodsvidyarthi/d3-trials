@@ -1,0 +1,128 @@
+div.header-container {
+    background-color: $primary-blue;
+}
+
+header.header {
+    background: $primary-blue;
+    position: relative;
+}
+
+div.header-left {
+    .nav-icon {
+        position: relative;
+        float: left;
+        top: 12px;
+        i {
+            font-size: 1.5em;
+        }
+    }
+    div.img {
+        position: relative;
+        background: url(../images/xcm_logo.png);
+        left: 20px;
+        float: left;
+        width: 200px;
+        height: 48px;
+    }
+    img {
+        position: relative;
+        left: 15px;
+        top: 10px;
+    }
+}
+
+div.navigation {
+    float: left;
+    & > nav ul li {
+        display: inline-block;
+        color: white;
+        padding: 0.7em;
+        font-family: Museo-300;
+        padding-bottom: 0.2em;
+        border-bottom: 1px solid $primary-blue;
+        position: relative;
+        transition: all 0.2s ease-in;
+        &:hover {
+            /*border-bottom: 1px solid $orange;*/
+            
+            cursor: pointer;
+        }
+        &.active {
+            /*border-bottom: 1px solid $orange;*/
+        }
+        &:after {
+            display: block;
+            content: ' ';
+            background-image: url('../../images/check.svg');
+            background-size: 28px 28px;
+            background-position: 80px 0;
+            /*height: 28px;*/
+            /*width: 28px;*/
+        }
+    }
+}
+
+div.search {
+    & > input[type="text"] {
+        float: left;
+        border-radius: 25px;
+        width: 75%;
+        position: relative;
+        top: 5px;
+        z-index: 99;
+    }
+    .fa-search {
+        position: absolute;
+        right: 30%;
+        top: 30%;
+        z-index: 100;
+    }
+    div.right-curved {
+        position: relative;
+        float: left;
+        width: 45px;
+        height: 36px;
+        top: 5px;
+        background-color: $secondary-blue;
+        border-top-right-radius: 18px;
+        border-bottom-right-radius: 18px;
+        left: -16px;
+        & > i.fa {
+            position: absolute;
+            z-index: 100;
+            left: 25px;
+            top: 10px;
+        }
+    }
+}
+
+div.header-right {
+    position: relative;
+    float: right;
+    div.notification {
+        position: relative;
+        float: right;
+        span {
+            float: left;
+            position: relative;
+            top: 12px;
+            margin-right: 3em;
+        }
+    }
+    button.uname {
+        position: relative;
+        top: 5px;
+        float: right;
+        outline: none;
+        font-family: Museo-300;
+        background-color: $secondary-blue;
+        max-width: 250px;
+        width: auto;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        &:hover {
+            background-color: $secondary-blue;
+        }
+    }
+}

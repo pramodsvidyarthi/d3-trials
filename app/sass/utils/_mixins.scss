@@ -1,0 +1,81 @@
+//grid related mixins
+
+@mixin outer-container {
+  @include clearfix;
+  max-width: $maxWidth;
+  margin: {
+    left: auto;
+    right: auto;
+  }
+}
+
+
+@mixin rem($property, $values...) {
+  $n: length($values);
+  $i: 1;
+
+  $pxlist: ();
+  $remlist: ();
+
+  @while $i <= $n {
+    $itemVal: (nth($values, $i));
+    @if $itemVal != "auto"{
+      $pxlist: append($pxlist, $itemVal + px);
+      //$remlist: append($remlist, ($itemVal / 10) + rem); // Use this if you've set HTML font size value to 62.5%
+      $remlist: append($remlist, ($itemVal / 16) + rem);
+    } @else {
+      $pxlist: append($pxlist, auto);
+      $remlist: append($remlist, auto);
+    }
+
+    $i: $i + 1;
+  }
+
+  #{$property}: $pxlist;
+  #{$property}: $remlist;
+}
+
+@mixin createcolclass() {
+	@for $i from 1 through $grid-columns {
+
+  .col_#{$i} {
+    @extend %col;
+    max-width: ($i / $grid-columns) * 100% - $gutter-width;
+    width: 100%;
+  }
+
+  .shiftleft_#{$i} {
+    margin-left: ($i / $grid-columns) * 100% + $gutter-width;
+  }
+
+  .shiftright_#{$i} {
+    margin-right: ($i / $grid-columns) * 100%;
+  }
+
+  .col:first-child.shiftleft_#{$i} {
+    margin-left: ($i / $grid-columns) * 100% + ($gutter-width / 2);
+  }
+
+ }
+}
+
+//MIXIN FOR BREAKPOINTS
+
+@mixin breakpoint($size) {
+  @media only screen and (max-width: $size + px) { @content; }
+}
+
+
+@mixin min-breakpoint($size) {
+  @media only screen and (min-width: $size + px) { @content; }
+}
+
+
+//MIXIN FOR WITH VENDOR PREFIXES
+
+@mixin vendor( $prop, $val ) {
+  -moz-#{$prop}: $val;
+  -webkit-#{$prop}: $val;
+  -o-#{$prop}: $val;
+  #{$prop}: $val;
+}
